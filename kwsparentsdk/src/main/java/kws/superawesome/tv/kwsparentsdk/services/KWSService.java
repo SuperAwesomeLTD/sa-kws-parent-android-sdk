@@ -13,9 +13,7 @@ public class KWSService implements KWSServiceInterface {
 
     // protected request vars
     protected static final String kwsApiURL = "https://parentsapi.demo.superawesome.tv/";
-    private String version;
-    private Context context;
-    private KWSLoggedUser loggedUser;
+    protected KWSLoggedUser loggedUser;
     private SANetwork network;
 
     public KWSService () {
@@ -57,8 +55,7 @@ public class KWSService implements KWSServiceInterface {
 
     }
 
-    public void execute (Context context) {
-        this.context = context;
+    protected void execute(Context context) {
         this.loggedUser = KWSParent.sdk.getLoggedUser();
 
         if (needsLoggedUser() && loggedUser == null) {
@@ -87,6 +84,15 @@ public class KWSService implements KWSServiceInterface {
                 }
                 case PUT: {
                     network.sendPUT(context, kwsApiURL + getEndpoint(), getQuery(), getHeader(), getBody(), new SANetworkInterface() {
+                        @Override
+                        public void response(int status, String payload, boolean success) {
+                            instance.success(status, payload, success);
+                        }
+                    });
+                    break;
+                }
+                case PATCH:{
+                    network.sendPATCH(context, kwsApiURL + getEndpoint(), getQuery(), getHeader(), getBody(), new SANetworkInterface() {
                         @Override
                         public void response(int status, String payload, boolean success) {
                             instance.success(status, payload, success);

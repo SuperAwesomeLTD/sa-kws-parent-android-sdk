@@ -5,8 +5,13 @@ import android.content.SharedPreferences;
 
 import kws.superawesome.tv.kwsparentsdk.aux.KWSLogger;
 import kws.superawesome.tv.kwsparentsdk.models.oauth.KWSLoggedUser;
+import kws.superawesome.tv.kwsparentsdk.models.parent.KWSParentUser;
 import kws.superawesome.tv.kwsparentsdk.services.oauth.KWSAuthService;
 import kws.superawesome.tv.kwsparentsdk.services.oauth.KWSAuthServiceInterface;
+import kws.superawesome.tv.kwsparentsdk.services.parent.KWSGetParentService;
+import kws.superawesome.tv.kwsparentsdk.services.parent.KWSGetParentServiceInterface;
+import kws.superawesome.tv.kwsparentsdk.services.parent.KWSUpdateParentService;
+import kws.superawesome.tv.kwsparentsdk.services.parent.KWSUpdateParentServiceInterface;
 
 /**
  * Created by gabriel.coman on 21/12/2016.
@@ -30,10 +35,14 @@ public class KWSParent {
 
     // services upon services
     private KWSAuthService authService;
+    private KWSGetParentService getParentService;
+    private KWSUpdateParentService updateParentService;
 
     // constructor
     private KWSParent () {
         authService = new KWSAuthService();
+        getParentService = new KWSGetParentService();
+        updateParentService = new KWSUpdateParentService();
     }
 
     // setup method
@@ -77,9 +86,12 @@ public class KWSParent {
                     editor.putString(KWS_PARENT_SDK_USER_KEY, user.writeToJson().toString());
                     editor.apply();
 
+                    // save user locally
+                    loggedUser = user;
+
                     // call proper valid callback
                     if (listener != null) {
-                        listener.didAuthUser(user);
+                        listener.didAuthUser(loggedUser);
                     }
                 } else {
                     // don't save user & call empty callback
@@ -97,15 +109,34 @@ public class KWSParent {
         preferences = context.getSharedPreferences(KWS_PARENT_SDK_PREF, 0);
         editor = preferences.edit();
         editor.remove(KWS_PARENT_SDK_USER_KEY);
+        editor.apply();
         loggedUser = null;
 
+        KWSLogger.log("KWS Parent SDK", "Logged out user!");
+
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    // Get & Update Parent user data
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public void getParentData (Context context, KWSGetParentServiceInterface listener) {
+        getParentService.execute(context, listener);
+    }
+
+    public void updateParentData (Context context, KWSParentUser updated, KWSUpdateParentServiceInterface listener) {
+        updateParentService.execute(context, updated, listener);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // Getters
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public KWSLoggedUser getLoggedUser() {
+    public KWSLoggedUser getLoggedUser () {
         return loggedUser;
+    }
+
+    public boolean isUserLogged () {
+        return loggedUser != null && loggedUser.isValid();
     }
 }
