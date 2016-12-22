@@ -29,7 +29,12 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:onClick="updateParentData"/>
-
+    <Button
+        android:id="@+id/GetChildren"
+        android:text="Get Children"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:onClick="getChildren"/>
     <TextView
         android:id="@+id/LogView"
         android:scrollbars="vertical"

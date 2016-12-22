@@ -8,9 +8,13 @@ import android.widget.TextView;
 
 import org.json.JSONObject;
 
+import java.util.List;
+
 import kws.superawesome.tv.kwsparentsdk.KWSParent;
+import kws.superawesome.tv.kwsparentsdk.models.kids.KWSChild;
 import kws.superawesome.tv.kwsparentsdk.models.oauth.KWSLoggedUser;
 import kws.superawesome.tv.kwsparentsdk.models.parent.KWSParentUser;
+import kws.superawesome.tv.kwsparentsdk.services.kids.KWSGetKidsServiceInterface;
 import kws.superawesome.tv.kwsparentsdk.services.oauth.KWSAuthServiceInterface;
 import kws.superawesome.tv.kwsparentsdk.services.parent.KWSGetParentServiceInterface;
 import kws.superawesome.tv.kwsparentsdk.services.parent.KWSUpdateParentServiceInterface;
@@ -32,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         authButton = (Button) findViewById(R.id.LoginLogoutButton);
 
         if (KWSParent.sdk.isUserLogged()) {
-            logs += "Already found user " + KWSParent.sdk.getLoggedUser().getMetadata().getUserId();
+            logs += "Already found user " + KWSParent.sdk.getLoggedUser().getMetadata().getUserId() + "\n";
             authButton.setText("Logged in with " + KWSParent.sdk.getLoggedUser().getMetadata().getUserId());
         } else {
             authButton.setText("Login as KWS Parent");
@@ -96,6 +100,16 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     logs += "Failed to update user data\n";
                 }
+                textView.setText(logs);
+            }
+        });
+    }
+
+    public void getChildren (View view) {
+        KWSParent.sdk.getAllChildren(this, new KWSGetKidsServiceInterface() {
+            @Override
+            public void gotChildren(List<KWSChild> children) {
+                logs += "Parent has " + children.size() + " children\n";
                 textView.setText(logs);
             }
         });

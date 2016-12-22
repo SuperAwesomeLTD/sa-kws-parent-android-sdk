@@ -3,9 +3,15 @@ package kws.superawesome.tv.kwsparentsdk;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import kws.superawesome.tv.kwsparentsdk.aux.KWSLogger;
+import kws.superawesome.tv.kwsparentsdk.models.kids.KWSChild;
 import kws.superawesome.tv.kwsparentsdk.models.oauth.KWSLoggedUser;
 import kws.superawesome.tv.kwsparentsdk.models.parent.KWSParentUser;
+import kws.superawesome.tv.kwsparentsdk.services.kids.KWSGetKidsService;
+import kws.superawesome.tv.kwsparentsdk.services.kids.KWSGetKidsServiceInterface;
 import kws.superawesome.tv.kwsparentsdk.services.oauth.KWSAuthService;
 import kws.superawesome.tv.kwsparentsdk.services.oauth.KWSAuthServiceInterface;
 import kws.superawesome.tv.kwsparentsdk.services.parent.KWSGetParentService;
@@ -37,12 +43,14 @@ public class KWSParent {
     private KWSAuthService authService;
     private KWSGetParentService getParentService;
     private KWSUpdateParentService updateParentService;
+    private KWSGetKidsService getKidsService;
 
     // constructor
     private KWSParent () {
         authService = new KWSAuthService();
         getParentService = new KWSGetParentService();
         updateParentService = new KWSUpdateParentService();
+        getKidsService = new KWSGetKidsService();
     }
 
     // setup method
@@ -126,6 +134,69 @@ public class KWSParent {
 
     public void updateParentData (Context context, KWSParentUser updated, KWSUpdateParentServiceInterface listener) {
         updateParentService.execute(context, updated, listener);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    // Get kids
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public void getAllChildren (Context context, KWSGetKidsServiceInterface listener) {
+        getKidsService.execute(context, listener);
+    }
+
+    public void getActiveChildren (Context context, final KWSGetKidsServiceInterface listener) {
+        getKidsService.execute(context, new KWSGetKidsServiceInterface() {
+            @Override
+            public void gotChildren(List<KWSChild> children) {
+                List<KWSChild> result = new ArrayList<>();
+
+                for (KWSChild child : children) {
+                    if (child.hasStatus() instanceof Boolean) {
+                        if (((Boolean) child.hasStatus())) {
+                            result.add(child);
+                        }
+                    }
+                }
+
+                listener.gotChildren(result);
+            }
+        });
+    }
+
+    public void getInactiveChildren (Context context, final KWSGetKidsServiceInterface listener) {
+        getKidsService.execute(context, new KWSGetKidsServiceInterface() {
+            @Override
+            public void gotChildren(List<KWSChild> children) {
+                List<KWSChild> result = new ArrayList<>();
+
+                for (KWSChild child : children) {
+                    if (child.hasStatus() instanceof Boolean) {
+                        if (!((Boolean) child.hasStatus())) {
+                            result.add(child);
+                        }
+                    }
+                }
+
+                listener.gotChildren(result);
+            }
+        });
+    }
+
+    public void getPendingChildren (Context context, final KWSGetKidsServiceInterface listener) {
+        getKidsService.execute(context, new KWSGetKidsServiceInterface() {
+            @Override
+            public void gotChildren(List<KWSChild> children) {
+                List<KWSChild> result = new ArrayList<>();
+
+                for (KWSChild child : children) {
+                    if (child.hasStatus() == null) {
+                        result.add(child);
+                    }
+                }
+
+                listener.gotChildren(result);
+            }
+        });
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
