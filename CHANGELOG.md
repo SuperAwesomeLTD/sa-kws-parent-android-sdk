@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+1.0.6
+ - Added good comments to the main SDK file (KWSParents)
+ - Made the auth creation method have a listner that just returns true or false if the operation was successful. This simplifies things because then as an
+SDK user you'll only get the logged user by calling KWSParents.sdk.getLoggedUser(), instad of having two instances when you auth (one from the
+callback, one from the SDK singleton).
+
 1.0.5
  - Added a lint option to not abort on errors, since now that I add several external .jar files (needed to extend Volley) lint fails because
 it can't be sure if they're part of the Android system or not.

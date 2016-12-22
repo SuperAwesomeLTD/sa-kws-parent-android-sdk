@@ -1,7 +1,5 @@
 package kws.superawesome.tv.kwsparentsdk.services.oauth;
 
-import kws.superawesome.tv.kwsparentsdk.models.oauth.KWSLoggedUser;
-
 public interface KWSAuthInterface {
-    void didAuthUser (KWSLoggedUser user);
+    void didAuthUser (boolean operationOK);
 }

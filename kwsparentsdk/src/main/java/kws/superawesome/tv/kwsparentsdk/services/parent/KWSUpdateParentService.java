@@ -70,7 +70,7 @@ public class KWSUpdateParentService extends KWSService {
     }
 
     public void execute (Context context, final KWSParentUser updatedParentUser, KWSUpdateParentInterface listener) {
-        this.listener = listener != null ? listener : new KWSUpdateParentInterface() {@Override public void updatedParent(boolean success) {}};
+        this.listener = listener != null ? listener : new KWSUpdateParentInterface() {@Override public void updatedParent(boolean operationOK) {}};
         this.updatedParentUser = updatedParentUser;
         this.loggedUser = KWSParent.sdk.getLoggedUser();
 

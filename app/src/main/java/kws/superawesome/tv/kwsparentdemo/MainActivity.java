@@ -15,6 +15,7 @@ import kws.superawesome.tv.kwsparentsdk.models.parent.KWSParentUser;
 import kws.superawesome.tv.kwsparentsdk.services.create.KWSCreateParentInterface;
 import kws.superawesome.tv.kwsparentsdk.services.create.KWSCreateParentStatus;
 import kws.superawesome.tv.kwsparentsdk.services.oauth.KWSAuthInterface;
+import kws.superawesome.tv.kwsparentsdk.services.oauth.KWSInternalAuthInterface;
 import kws.superawesome.tv.kwsparentsdk.services.parent.KWSGetParentInterface;
 import kws.superawesome.tv.kwsparentsdk.services.parent.KWSUpdateParentInterface;
 
@@ -51,14 +52,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void loginUser (View view) {
-        KWSParent.sdk.login(this, "gabriel.coman+1013@superawesome.tv", "testtest", new KWSAuthInterface() {
+        final String email = "gabriel.coman+1013@superawesome.tv";
+        final String password = "testtest";
+
+        KWSParent.sdk.login(this, email, password, new KWSAuthInterface() {
             @Override
-            public void didAuthUser(KWSLoggedUser user) {
-                if (user != null && user.isValid()) {
-                    logs += "Logged in with User " + user.getMetadata().getUserId() + "\n";
-                    authButton.setText("Logged in with " + KWSParent.sdk.getLoggedUser().getMetadata().getUserId());
+            public void didAuthUser(boolean operationOK) {
+                if (operationOK) {
+                    logs += "Managed to authenticate user " + email + "\n";
                 } else {
-                    logs += "Could not log user gabriel.coman+5@superawesome.tv\n";
+                    logs += "Did not manage to authenticate user " + email + "\n";
                 }
                 textView.setText(logs);
             }
@@ -93,8 +96,8 @@ public class MainActivity extends AppCompatActivity {
 
         KWSParent.sdk.updateParentData(this, updated, new KWSUpdateParentInterface() {
             @Override
-            public void updatedParent(boolean success) {
-                if (success) {
+            public void updatedParent(boolean operationOK) {
+                if (operationOK) {
                     logs += "Updated user successfully!\n";
                 } else {
                     logs += "Failed to update user data\n";
