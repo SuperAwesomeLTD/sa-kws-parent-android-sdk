@@ -2,7 +2,7 @@ package kws.superawesome.tv.kwsparentsdk.services;
 
 import org.json.JSONObject;
 
-interface KWSServiceInterface {
+interface KWSInterface {
     String getEndpoint ();
     KWSHTTPMethod getMethod ();
     JSONObject getQuery ();

@@ -3,21 +3,17 @@ package kws.superawesome.tv.kwsparentsdk;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import kws.superawesome.tv.kwsparentsdk.aux.KWSLogger;
-import kws.superawesome.tv.kwsparentsdk.models.kids.KWSChild;
 import kws.superawesome.tv.kwsparentsdk.models.oauth.KWSLoggedUser;
 import kws.superawesome.tv.kwsparentsdk.models.parent.KWSParentUser;
-import kws.superawesome.tv.kwsparentsdk.services.kids.KWSGetKidsService;
-import kws.superawesome.tv.kwsparentsdk.services.kids.KWSGetKidsServiceInterface;
+import kws.superawesome.tv.kwsparentsdk.services.create.KWSCreateParentInterface;
+import kws.superawesome.tv.kwsparentsdk.services.create.KWSCreateParentService;
+import kws.superawesome.tv.kwsparentsdk.services.oauth.KWSAuthInterface;
 import kws.superawesome.tv.kwsparentsdk.services.oauth.KWSAuthService;
-import kws.superawesome.tv.kwsparentsdk.services.oauth.KWSAuthServiceInterface;
+import kws.superawesome.tv.kwsparentsdk.services.parent.KWSGetParentInterface;
 import kws.superawesome.tv.kwsparentsdk.services.parent.KWSGetParentService;
-import kws.superawesome.tv.kwsparentsdk.services.parent.KWSGetParentServiceInterface;
+import kws.superawesome.tv.kwsparentsdk.services.parent.KWSUpdateParentInterface;
 import kws.superawesome.tv.kwsparentsdk.services.parent.KWSUpdateParentService;
-import kws.superawesome.tv.kwsparentsdk.services.parent.KWSUpdateParentServiceInterface;
 
 /**
  * Created by gabriel.coman on 21/12/2016.
@@ -40,17 +36,17 @@ public class KWSParent {
     private KWSLoggedUser loggedUser;
 
     // services upon services
+    private KWSCreateParentService createParentService;
     private KWSAuthService authService;
     private KWSGetParentService getParentService;
     private KWSUpdateParentService updateParentService;
-    private KWSGetKidsService getKidsService;
 
     // constructor
     private KWSParent () {
+        createParentService = new KWSCreateParentService();
         authService = new KWSAuthService();
         getParentService = new KWSGetParentService();
         updateParentService = new KWSUpdateParentService();
-        getKidsService = new KWSGetKidsService();
     }
 
     // setup method
@@ -78,11 +74,19 @@ public class KWSParent {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
+    // Create
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public void create (Context context, String email, String password, KWSCreateParentInterface listener) {
+        createParentService.execute(context, email, password, listener);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     // Login & Logout SDK methods
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public void login (final Context context, String email, String password, final KWSAuthServiceInterface listener) {
-        authService.execute(context, email, password, new KWSAuthServiceInterface() {
+    public void login (final Context context, String email, String password, final KWSAuthInterface listener) {
+        authService.execute(context, email, password, new KWSAuthInterface() {
             @Override
             public void didAuthUser(KWSLoggedUser user) {
 
@@ -128,75 +132,12 @@ public class KWSParent {
     // Get & Update Parent user data
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public void getParentData (Context context, KWSGetParentServiceInterface listener) {
+    public void getParentData (Context context, KWSGetParentInterface listener) {
         getParentService.execute(context, listener);
     }
 
-    public void updateParentData (Context context, KWSParentUser updated, KWSUpdateParentServiceInterface listener) {
+    public void updateParentData (Context context, KWSParentUser updated, KWSUpdateParentInterface listener) {
         updateParentService.execute(context, updated, listener);
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    // Get kids
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-
-    public void getAllChildren (Context context, KWSGetKidsServiceInterface listener) {
-        getKidsService.execute(context, listener);
-    }
-
-    public void getActiveChildren (Context context, final KWSGetKidsServiceInterface listener) {
-        getKidsService.execute(context, new KWSGetKidsServiceInterface() {
-            @Override
-            public void gotChildren(List<KWSChild> children) {
-                List<KWSChild> result = new ArrayList<>();
-
-                for (KWSChild child : children) {
-                    if (child.hasStatus() instanceof Boolean) {
-                        if (((Boolean) child.hasStatus())) {
-                            result.add(child);
-                        }
-                    }
-                }
-
-                listener.gotChildren(result);
-            }
-        });
-    }
-
-    public void getInactiveChildren (Context context, final KWSGetKidsServiceInterface listener) {
-        getKidsService.execute(context, new KWSGetKidsServiceInterface() {
-            @Override
-            public void gotChildren(List<KWSChild> children) {
-                List<KWSChild> result = new ArrayList<>();
-
-                for (KWSChild child : children) {
-                    if (child.hasStatus() instanceof Boolean) {
-                        if (!((Boolean) child.hasStatus())) {
-                            result.add(child);
-                        }
-                    }
-                }
-
-                listener.gotChildren(result);
-            }
-        });
-    }
-
-    public void getPendingChildren (Context context, final KWSGetKidsServiceInterface listener) {
-        getKidsService.execute(context, new KWSGetKidsServiceInterface() {
-            @Override
-            public void gotChildren(List<KWSChild> children) {
-                List<KWSChild> result = new ArrayList<>();
-
-                for (KWSChild child : children) {
-                    if (child.hasStatus() == null) {
-                        result.add(child);
-                    }
-                }
-
-                listener.gotChildren(result);
-            }
-        });
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////

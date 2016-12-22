@@ -1,6 +1,16 @@
 CHANGELOG
 =========
 
+1.0.4
+ - Reverted some changes:
+	- removed all code allowing SDK to access parent's kids since this is not in the scope
+ - Added user creation through the SDK, with relevant error messages (created, duplicate, invalid email, invalid password, network error)
+ - SDK scope is at this point:
+	- Create user (and validate through email)
+	- Auth user (with login & logout and 24h store)
+	- Get parent details
+	- Update parent details
+
 1.0.3
  - Added methods to get a parent's children:
 	- all the children

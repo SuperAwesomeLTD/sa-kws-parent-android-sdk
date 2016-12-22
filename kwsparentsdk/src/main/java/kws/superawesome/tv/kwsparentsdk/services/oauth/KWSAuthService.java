@@ -28,7 +28,7 @@ import tv.superawesome.lib.sautils.SAUtils;
 
 public class KWSAuthService extends KWSService {
 
-    private KWSAuthServiceInterface listener;
+    private KWSAuthInterface listener;
     private String email;
     private String password;
 
@@ -83,10 +83,10 @@ public class KWSAuthService extends KWSService {
 
     }
 
-    public void execute (Context context, String email, String password, KWSAuthServiceInterface listener) {
+    public void execute (Context context, String email, String password, KWSAuthInterface listener) {
         this.email = email;
         this.password = password;
-        this.listener = listener != null ? listener : new KWSAuthServiceInterface() {@Override public void didAuthUser(KWSLoggedUser user) {}};
+        this.listener = listener != null ? listener : new KWSAuthInterface() {@Override public void didAuthUser(KWSLoggedUser user) {}};
 
         // create endpoint
         final String endpoint = KWSService.kwsApiURL + getEndpoint();

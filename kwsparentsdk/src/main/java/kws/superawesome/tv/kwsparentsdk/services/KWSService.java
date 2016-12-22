@@ -9,7 +9,7 @@ import kws.superawesome.tv.kwsparentsdk.models.oauth.KWSLoggedUser;
 import tv.superawesome.lib.sanetwork.request.SANetwork;
 import tv.superawesome.lib.sanetwork.request.SANetworkInterface;
 
-public class KWSService implements KWSServiceInterface {
+public class KWSService implements KWSInterface {
 
     // protected request vars
     protected static final String kwsApiURL = "https://parentsapi.demo.superawesome.tv/";

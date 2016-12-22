@@ -12,7 +12,7 @@ import tv.superawesome.lib.sajsonparser.SAJsonParser;
 
 public class KWSGetParentService extends KWSService {
 
-    private KWSGetParentServiceInterface listener;
+    private KWSGetParentInterface listener;
 
     @Override
     public String getEndpoint() {
@@ -48,8 +48,8 @@ public class KWSGetParentService extends KWSService {
         }
     }
 
-    public void execute (Context context, KWSGetParentServiceInterface listener) {
-        this.listener = listener != null ? listener : new KWSGetParentServiceInterface() {@Override public void gotParent(KWSParentUser parent) {}};
+    public void execute (Context context, KWSGetParentInterface listener) {
+        this.listener = listener != null ? listener : new KWSGetParentInterface() {@Override public void gotParent(KWSParentUser parent) {}};
         super.execute(context);
     }
 }

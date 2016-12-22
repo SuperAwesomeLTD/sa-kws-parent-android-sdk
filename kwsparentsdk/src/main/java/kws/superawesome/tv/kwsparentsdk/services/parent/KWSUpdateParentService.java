@@ -1,10 +1,8 @@
 package kws.superawesome.tv.kwsparentsdk.services.parent;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -15,11 +13,9 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 import kws.superawesome.tv.kwsparentsdk.KWSParent;
 import kws.superawesome.tv.kwsparentsdk.aux.KWSLogger;
@@ -35,7 +31,7 @@ import tv.superawesome.lib.sajsonparser.SAJsonParser;
 
 public class KWSUpdateParentService extends KWSService {
 
-    private KWSUpdateParentServiceInterface listener;
+    private KWSUpdateParentInterface listener;
     private KWSParentUser updatedParentUser;
 
     @Override
@@ -73,8 +69,8 @@ public class KWSUpdateParentService extends KWSService {
         listener.updatedParent(updatedStatus);
     }
 
-    public void execute (Context context, final KWSParentUser updatedParentUser, KWSUpdateParentServiceInterface listener) {
-        this.listener = listener != null ? listener : new KWSUpdateParentServiceInterface() {@Override public void updatedParent(boolean success) {}};
+    public void execute (Context context, final KWSParentUser updatedParentUser, KWSUpdateParentInterface listener) {
+        this.listener = listener != null ? listener : new KWSUpdateParentInterface() {@Override public void updatedParent(boolean success) {}};
         this.updatedParentUser = updatedParentUser;
         this.loggedUser = KWSParent.sdk.getLoggedUser();
 

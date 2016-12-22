@@ -8,16 +8,15 @@ import android.widget.TextView;
 
 import org.json.JSONObject;
 
-import java.util.List;
-
 import kws.superawesome.tv.kwsparentsdk.KWSParent;
-import kws.superawesome.tv.kwsparentsdk.models.kids.KWSChild;
+import kws.superawesome.tv.kwsparentsdk.aux.KWSLogger;
 import kws.superawesome.tv.kwsparentsdk.models.oauth.KWSLoggedUser;
 import kws.superawesome.tv.kwsparentsdk.models.parent.KWSParentUser;
-import kws.superawesome.tv.kwsparentsdk.services.kids.KWSGetKidsServiceInterface;
-import kws.superawesome.tv.kwsparentsdk.services.oauth.KWSAuthServiceInterface;
-import kws.superawesome.tv.kwsparentsdk.services.parent.KWSGetParentServiceInterface;
-import kws.superawesome.tv.kwsparentsdk.services.parent.KWSUpdateParentServiceInterface;
+import kws.superawesome.tv.kwsparentsdk.services.create.KWSCreateParentInterface;
+import kws.superawesome.tv.kwsparentsdk.services.create.KWSCreateParentStatus;
+import kws.superawesome.tv.kwsparentsdk.services.oauth.KWSAuthInterface;
+import kws.superawesome.tv.kwsparentsdk.services.parent.KWSGetParentInterface;
+import kws.superawesome.tv.kwsparentsdk.services.parent.KWSUpdateParentInterface;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -52,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void loginUser (View view) {
-        KWSParent.sdk.login(this, "gabriel.coman+1005@superawesome.tv", "testtest", new KWSAuthServiceInterface() {
+        KWSParent.sdk.login(this, "gabriel.coman+1013@superawesome.tv", "testtest", new KWSAuthInterface() {
             @Override
             public void didAuthUser(KWSLoggedUser user) {
                 if (user != null && user.isValid()) {
@@ -74,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getParentData (View view) {
-        KWSParent.sdk.getParentData(this, new KWSGetParentServiceInterface() {
+        KWSParent.sdk.getParentData(this, new KWSGetParentInterface() {
             @Override
             public void gotParent(KWSParentUser parent) {
                 if (parent != null) {
@@ -92,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         updated.setFirstName("Juan");
         updated.setLastName("Marcos");
 
-        KWSParent.sdk.updateParentData(this, updated, new KWSUpdateParentServiceInterface() {
+        KWSParent.sdk.updateParentData(this, updated, new KWSUpdateParentInterface() {
             @Override
             public void updatedParent(boolean success) {
                 if (success) {
@@ -106,11 +105,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getChildren (View view) {
-        KWSParent.sdk.getAllChildren(this, new KWSGetKidsServiceInterface() {
+        KWSParent.sdk.create(this, "gabriel.coman+1013@superawesome.tv", "tetestttasa", new KWSCreateParentInterface() {
             @Override
-            public void gotChildren(List<KWSChild> children) {
-                logs += "Parent has " + children.size() + " children\n";
-                textView.setText(logs);
+            public void didCreateParent(KWSCreateParentStatus status) {
+                KWSLogger.log("App", "Result is " + status);
             }
         });
     }
