@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+1.0.5
+ - Added a lint option to not abort on errors, since now that I add several external .jar files (needed to extend Volley) lint fails because
+it can't be sure if they're part of the Android system or not.
+
 1.0.4
  - Reverted some changes:
 	- removed all code allowing SDK to access parent's kids since this is not in the scope
