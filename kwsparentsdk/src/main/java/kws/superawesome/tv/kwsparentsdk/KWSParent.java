@@ -19,13 +19,13 @@ import kws.superawesome.tv.kwsparentsdk.services.parent.KWSUpdateParentService;
 public class KWSParent {
 
     /**
-     * Basically constants used by the prefferences
+     * Basically constants used by the preferences
      */
     private static final String KWS_PARENT_SDK_PREF = "KWS_PARENT_SDK_PREF";
     private static final String KWS_PARENT_SDK_USER_KEY = "KWS_PARENT_SDK_USER_KEY";
 
     /**
-     * Singleton isntance variable
+     * Singleton instance variable
      */
     public static KWSParent sdk = new KWSParent();
 
@@ -169,7 +169,7 @@ public class KWSParent {
      * logged user.
      * @param context - the current context
      * @param listener - the listener used as callback for the method. Will always need one
-     *                 method implementation for "gotParent", which will in turn have one
+     *                 method implementation for "didGetParent", which will in turn have one
      *                 parameter of type KWSParentUser, which is a model class that contains all
      *                 parent details.
      */
@@ -186,7 +186,7 @@ public class KWSParent {
      * @param updated - a KWSParentUser type model that contains the fields to be updated. All
      *                fields that are set to null are ignored.
      * @param listener - the listener used as callback for the method. Will always need one
-     *                 method implementation for "updatedParent", which will in turn have one
+     *                 method implementation for "didUpdateParent", which will in turn have one
      *                 parameter of type boolean indicating if the operation was successful or not.
      */
     public void updateParentData (Context context, KWSParentUser updated, KWSUpdateParentInterface listener) {

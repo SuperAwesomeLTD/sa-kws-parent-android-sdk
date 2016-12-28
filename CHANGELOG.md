@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+1.0.7
+ - Renamed some of the callback interface methods for GetParentInterface and UpdateParentInterface
+
 1.0.6
  - Added good comments to the main SDK file (KWSParents)
  - Made the auth creation method have a listner that just returns true or false if the operation was successful. This simplifies things because then as an

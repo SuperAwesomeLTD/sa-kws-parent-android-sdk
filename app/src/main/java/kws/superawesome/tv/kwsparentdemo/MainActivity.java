@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
     public void getParentData (View view) {
         KWSParent.sdk.getParentData(this, new KWSGetParentInterface() {
             @Override
-            public void gotParent(KWSParentUser parent) {
+            public void didGetParent(KWSParentUser parent) {
                 if (parent != null) {
                     logs += "Parent data is " + parent.writeToJson().toString() + "\n";
                 } else {
@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
         KWSParent.sdk.updateParentData(this, updated, new KWSUpdateParentInterface() {
             @Override
-            public void updatedParent(boolean operationOK) {
+            public void didUpdateParent(boolean operationOK) {
                 if (operationOK) {
                     logs += "Updated user successfully!\n";
                 } else {

@@ -59,18 +59,17 @@ public class KWSUpdateParentService extends KWSService {
 
     @Override
     public void success(int status, String payload, boolean success) {
-        KWSLogger.log("KWSUpdateParentService", status + "|" + payload + "|" + success);
         boolean updatedStatus = success && status == 204;
         if (updatedStatus) {
             KWSLogger.log("KWSUpdateParentService", "Manged to update user!");
         } else {
             KWSLogger.error("KWSUpdateParentService", "Wasn't able to update user! " + payload);
         }
-        listener.updatedParent(updatedStatus);
+        listener.didUpdateParent(updatedStatus);
     }
 
     public void execute (Context context, final KWSParentUser updatedParentUser, KWSUpdateParentInterface listener) {
-        this.listener = listener != null ? listener : new KWSUpdateParentInterface() {@Override public void updatedParent(boolean operationOK) {}};
+        this.listener = listener != null ? listener : new KWSUpdateParentInterface() {@Override public void didUpdateParent(boolean operationOK) {}};
         this.updatedParentUser = updatedParentUser;
         this.loggedUser = KWSParent.sdk.getLoggedUser();
 

@@ -37,19 +37,19 @@ public class KWSGetParentService extends KWSService {
             KWSParentUser parent = new KWSParentUser(payload);
             if (parent.isValid()) {
                 KWSLogger.log("KWSGetParentService", "Got parent with ID: " + parent.getId() + " and Email: " + parent.getEmail());
-                listener.gotParent(parent);
+                listener.didGetParent(parent);
             } else {
                 KWSLogger.error("KWSGetParentService", "The parent data I got for user with ID : " + super.loggedUser.getMetadata().getUserId() + " was not valid.");
-                listener.gotParent(null);
+                listener.didGetParent(null);
             }
         } else {
             KWSLogger.error("KWSGetParentService", "There was a network operation trying to get parent data.");
-            listener.gotParent(null);
+            listener.didGetParent(null);
         }
     }
 
     public void execute (Context context, KWSGetParentInterface listener) {
-        this.listener = listener != null ? listener : new KWSGetParentInterface() {@Override public void gotParent(KWSParentUser parent) {}};
+        this.listener = listener != null ? listener : new KWSGetParentInterface() {@Override public void didGetParent(KWSParentUser parent) {}};
         super.execute(context);
     }
 }

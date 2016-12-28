@@ -5,5 +5,5 @@ package kws.superawesome.tv.kwsparentsdk.services.parent;
  */
 
 public interface KWSUpdateParentInterface {
-    void updatedParent (boolean operationOK);
+    void didUpdateParent(boolean operationOK);
 }
