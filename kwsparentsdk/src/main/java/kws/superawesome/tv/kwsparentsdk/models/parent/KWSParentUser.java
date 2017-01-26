@@ -3,14 +3,14 @@ package kws.superawesome.tv.kwsparentsdk.models.parent;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import tv.superawesome.lib.sajsonparser.JSONSerializable;
+import tv.superawesome.lib.sajsonparser.SABaseObject;
 import tv.superawesome.lib.sajsonparser.SAJsonParser;
 
 /**
  * Created by gabriel.coman on 21/12/2016.
  */
 
-public class KWSParentUser implements JSONSerializable {
+public class KWSParentUser extends SABaseObject {
 
     private int id;
     private String email;

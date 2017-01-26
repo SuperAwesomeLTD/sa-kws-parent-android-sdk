@@ -2,11 +2,10 @@ package kws.superawesome.tv.kwsparentsdk.models.oauth;
 
 import org.json.JSONObject;
 
-import kws.superawesome.tv.kwsparentsdk.aux.KWSLogger;
-import tv.superawesome.lib.sajsonparser.JSONSerializable;
+import tv.superawesome.lib.sajsonparser.SABaseObject;
 import tv.superawesome.lib.sajsonparser.SAJsonParser;
 
-public class KWSMetadata implements JSONSerializable {
+public class KWSMetadata extends SABaseObject {
 
     private static final int DEFAULT_VAL = -1;
 

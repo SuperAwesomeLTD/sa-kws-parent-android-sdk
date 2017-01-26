@@ -67,7 +67,7 @@ public class KWSService implements KWSInterface {
                 case GET: {
                     network.sendGET(context, kwsApiURL + getEndpoint(), getQuery(), getHeader(), new SANetworkInterface() {
                         @Override
-                        public void response(int status, String payload, boolean success) {
+                        public void saDidGetResponse(int status, String payload, boolean success) {
                             instance.success(status, payload, success);
                         }
                     });
@@ -76,7 +76,7 @@ public class KWSService implements KWSInterface {
                 case POST: {
                     network.sendPOST(context, kwsApiURL + getEndpoint(), getQuery(), getHeader(), getBody(), new SANetworkInterface() {
                         @Override
-                        public void response(int status, String payload, boolean success) {
+                        public void saDidGetResponse(int status, String payload, boolean success) {
                             instance.success(status, payload, success);
                         }
                     });
@@ -85,19 +85,14 @@ public class KWSService implements KWSInterface {
                 case PUT: {
                     network.sendPUT(context, kwsApiURL + getEndpoint(), getQuery(), getHeader(), getBody(), new SANetworkInterface() {
                         @Override
-                        public void response(int status, String payload, boolean success) {
+                        public void saDidGetResponse(int status, String payload, boolean success) {
                             instance.success(status, payload, success);
                         }
                     });
                     break;
                 }
                 case PATCH:{
-                    network.sendPATCH(context, kwsApiURL + getEndpoint(), getQuery(), getHeader(), getBody(), new SANetworkInterface() {
-                        @Override
-                        public void response(int status, String payload, boolean success) {
-                            instance.success(status, payload, success);
-                        }
-                    });
+                    // do nothing
                     break;
                 }
             }

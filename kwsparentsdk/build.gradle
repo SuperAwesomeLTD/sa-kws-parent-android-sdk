@@ -88,8 +88,8 @@ repositories {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'tv.superawesome.lib.sajsonparser:sajsonparser:0.2.4'
-    compile 'tv.superawesome.lib.sanetwork:sanetwork:0.3.2'
-    compile 'tv.superawesome.lib.sautils:sautils:0.2.8'
+    compile 'tv.superawesome.lib.sajsonparser:sajsonparser:0.2.5'
+    compile 'tv.superawesome.lib.sanetwork:sanetwork:0.3.7'
+    compile 'tv.superawesome.lib.sautils:sautils:0.3.0'
     compile 'com.android.volley:volley:1.0.0'
 }

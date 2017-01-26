@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+1.1.1
+ - Updated Utils, Networking and JsonParser dependencies
+ - Removed the KWSLogger class (for now)
+ - Renamed some KWSParent sdk singleton methods to be more in line with their iOS counterparts
+ - Moved the custom OKHttpStack as a private inner class to KWSUpdateParentService
+ - Changed the KWSAuthService class to work with the new templated SAAsync class (and work over a SANetworkResponse object for type safety)
+
 1.0.7
  - Renamed some of the callback interface methods for GetParentInterface and UpdateParentInterface
 

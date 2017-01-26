@@ -1,25 +1,30 @@
 package kws.superawesome.tv.kwsparentsdk.services.parent;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.OkUrlFactory;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 import kws.superawesome.tv.kwsparentsdk.KWSParent;
-import kws.superawesome.tv.kwsparentsdk.aux.KWSLogger;
-import kws.superawesome.tv.kwsparentsdk.aux.OkHttpStack;
 import kws.superawesome.tv.kwsparentsdk.models.parent.KWSParentUser;
 import kws.superawesome.tv.kwsparentsdk.services.KWSHTTPMethod;
 import kws.superawesome.tv.kwsparentsdk.services.KWSService;
@@ -61,9 +66,9 @@ public class KWSUpdateParentService extends KWSService {
     public void success(int status, String payload, boolean success) {
         boolean updatedStatus = success && status == 204;
         if (updatedStatus) {
-            KWSLogger.log("KWSUpdateParentService", "Manged to update user!");
+            Log.d("KWSUpdateParentService", "Manged to update user!");
         } else {
-            KWSLogger.error("KWSUpdateParentService", "Wasn't able to update user! " + payload);
+            Log.e("KWSUpdateParentService", "Wasn't able to update user! " + payload);
         }
         listener.didUpdateParent(updatedStatus);
     }
@@ -132,5 +137,24 @@ public class KWSUpdateParentService extends KWSService {
         }
 
         return map;
+    }
+}
+
+class OkHttpStack extends HurlStack {
+    private final OkUrlFactory mFactory;
+
+    OkHttpStack() {
+        this(new OkHttpClient());
+    }
+
+    private OkHttpStack(OkHttpClient client) {
+        if (client == null) {
+            throw new NullPointerException("Client must not be null.");
+        }
+        mFactory = new OkUrlFactory(client);
+    }
+
+    @Override protected HttpURLConnection createConnection(URL url) throws IOException {
+        return mFactory.open(url);
     }
 }

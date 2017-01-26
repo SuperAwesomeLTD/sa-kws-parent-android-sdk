@@ -7,10 +7,10 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 
-import tv.superawesome.lib.sajsonparser.JSONSerializable;
+import tv.superawesome.lib.sajsonparser.SABaseObject;
 import tv.superawesome.lib.sajsonparser.SAJsonParser;
 
-public class KWSLoggedUser implements JSONSerializable {
+public class KWSLoggedUser extends SABaseObject {
 
     private String tokenType;
     private String accessToken;

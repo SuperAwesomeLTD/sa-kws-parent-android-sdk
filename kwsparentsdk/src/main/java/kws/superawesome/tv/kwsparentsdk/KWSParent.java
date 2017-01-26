@@ -2,8 +2,8 @@ package kws.superawesome.tv.kwsparentsdk;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
-import kws.superawesome.tv.kwsparentsdk.aux.KWSLogger;
 import kws.superawesome.tv.kwsparentsdk.models.oauth.KWSLoggedUser;
 import kws.superawesome.tv.kwsparentsdk.models.parent.KWSParentUser;
 import kws.superawesome.tv.kwsparentsdk.services.create.KWSCreateParentInterface;
@@ -75,20 +75,20 @@ public class KWSParent {
             // if it's still valid
             if (tmpUser.isValid()) {
                 loggedUser = tmpUser;
-                KWSLogger.log("KWS Parent SDK", "Already found a logged user with ID: " + loggedUser.getMetadata().getUserId() + ".");
+                Log.w("KWS Parent SDK", "Already found a logged user with ID: " + loggedUser.getMetadata().getUserId() + ".");
             } else {
-                KWSLogger.warning("KWS Parent SDK", "Already found a logged user with ID: " + tmpUser.getMetadata().getUserId() + " but it's not valid anymore.");
+                Log.w("KWS Parent SDK", "Already found a logged user with ID: " + tmpUser.getMetadata().getUserId() + " but it's not valid anymore.");
                 preferences.edit().remove(KWS_PARENT_SDK_USER_KEY).apply();
             }
         } else {
-            KWSLogger.warning("KWS Parent SDK", "Could not find a valid user stored in preferences.");
+            Log.w("KWS Parent SDK", "Could not find a valid user stored in preferences.");
         }
     }
 
     /**
      * Method that creates a new parent user
      * @param context - the current context
-     * @param email - an email address for the new parent user.
+     * @param parentEmail - an email address for the new parent user.
      *              If it's invalid, the method will forward a listener call with
      *              INVALID_EMAIL as status parameter.
      *              If it's a duplicate email, the method will forward a listener call with
@@ -105,27 +105,27 @@ public class KWSParent {
      *                      - INVALID_PASSWORD
      *                      - NETWORK_ERROR
      */
-    public void create (Context context, String email, String password, KWSCreateParentInterface listener) {
-        createParentService.execute(context, email, password, listener);
+    public void create (Context context, String parentEmail, String password, KWSCreateParentInterface listener) {
+        createParentService.execute(context, parentEmail, password, listener);
     }
 
     /**
      * Method that logs in a parent user to Kids Web Services and saves the logged user data
      * for 24h on the Android device
      * @param context - the current context
-     * @param email - a valid parent's user email
+     * @param parentEmail - a valid parent's user email
      * @param password - a valid parent's user password
      * @param listener - the listener used as callback for the method. Will always need one
      *                 method implementation for "didAuthUser" with a boolean parameter indicating
      *                 success or failure.
      */
-    public void login (final Context context, String email, String password, final KWSAuthInterface listener) {
-        authService.execute(context, email, password, new KWSInternalAuthInterface() {
+    public void login (final Context context, String parentEmail, String password, final KWSAuthInterface listener) {
+        authService.execute(context, parentEmail, password, new KWSInternalAuthInterface() {
             @Override
             public void didAuthUser(KWSLoggedUser user) {
 
                 if (user != null) {
-                    KWSLogger.log("KWS Parent SDK", "Saving user " + user.getMetadata().getUserId() + " to local preferences for further use.");
+                    Log.d("KWS Parent SDK", "Saving user " + user.getMetadata().getUserId() + " to local preferences for further use.");
                     // save user
                     preferences = context.getSharedPreferences(KWS_PARENT_SDK_PREF, 0);
                     preferences.edit().putString(KWS_PARENT_SDK_USER_KEY, user.writeToJson().toString()).apply();
@@ -160,7 +160,7 @@ public class KWSParent {
         preferences.edit().remove(KWS_PARENT_SDK_USER_KEY).apply();
         loggedUser = null;
 
-        KWSLogger.log("KWS Parent SDK", "Logged out user!");
+        Log.w("KWS Parent SDK", "Logged out user!");
 
     }
 
@@ -183,14 +183,14 @@ public class KWSParent {
      * @warning This method uses the "Volley" library for the moment, since vanilla
      * HttpConnection doesn't support the "PATCH" request type.
      * @param context - the current context
-     * @param updated - a KWSParentUser type model that contains the fields to be updated. All
+     * @param parent - a KWSParentUser type model that contains the fields to be updated. All
      *                fields that are set to null are ignored.
      * @param listener - the listener used as callback for the method. Will always need one
      *                 method implementation for "didUpdateParent", which will in turn have one
      *                 parameter of type boolean indicating if the operation was successful or not.
      */
-    public void updateParentData (Context context, KWSParentUser updated, KWSUpdateParentInterface listener) {
-        updateParentService.execute(context, updated, listener);
+    public void update(Context context, KWSParentUser parent, KWSUpdateParentInterface listener) {
+        updateParentService.execute(context, parent, listener);
     }
 
     /**
@@ -214,20 +214,6 @@ public class KWSParent {
      * @return a string representing the SDK version
      */
     public String getVersion () {
-        return "android-1.0.6";
-    }
-
-    /**
-     * Aux method that enables logging in the console
-     */
-    public void enableLogging () {
-        KWSLogger.setLoggingEnabled(true);
-    }
-
-    /**
-     * Aux method that disables logging in the console
-     */
-    public void disableLogging () {
-        KWSLogger.setLoggingEnabled(false);
+        return "android-1.1.1";
     }
 }

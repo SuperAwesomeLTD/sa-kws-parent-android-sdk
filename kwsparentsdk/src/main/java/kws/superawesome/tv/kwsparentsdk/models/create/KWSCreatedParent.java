@@ -2,10 +2,10 @@ package kws.superawesome.tv.kwsparentsdk.models.create;
 
 import org.json.JSONObject;
 
-import tv.superawesome.lib.sajsonparser.JSONSerializable;
+import tv.superawesome.lib.sajsonparser.SABaseObject;
 import tv.superawesome.lib.sajsonparser.SAJsonParser;
 
-public class KWSCreatedParent implements JSONSerializable {
+public class KWSCreatedParent extends SABaseObject {
 
     private static final int DEFAULT_ID = -1;
     private static final int DEFAULT_CODE = -1;

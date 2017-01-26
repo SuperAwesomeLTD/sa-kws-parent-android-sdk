@@ -2,6 +2,7 @@ package kws.superawesome.tv.kwsparentdemo;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -9,13 +10,10 @@ import android.widget.TextView;
 import org.json.JSONObject;
 
 import kws.superawesome.tv.kwsparentsdk.KWSParent;
-import kws.superawesome.tv.kwsparentsdk.aux.KWSLogger;
-import kws.superawesome.tv.kwsparentsdk.models.oauth.KWSLoggedUser;
 import kws.superawesome.tv.kwsparentsdk.models.parent.KWSParentUser;
 import kws.superawesome.tv.kwsparentsdk.services.create.KWSCreateParentInterface;
 import kws.superawesome.tv.kwsparentsdk.services.create.KWSCreateParentStatus;
 import kws.superawesome.tv.kwsparentsdk.services.oauth.KWSAuthInterface;
-import kws.superawesome.tv.kwsparentsdk.services.oauth.KWSInternalAuthInterface;
 import kws.superawesome.tv.kwsparentsdk.services.parent.KWSGetParentInterface;
 import kws.superawesome.tv.kwsparentsdk.services.parent.KWSUpdateParentInterface;
 
@@ -94,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
         updated.setFirstName("Juan");
         updated.setLastName("Marcos");
 
-        KWSParent.sdk.updateParentData(this, updated, new KWSUpdateParentInterface() {
+        KWSParent.sdk.update(this, updated, new KWSUpdateParentInterface() {
             @Override
             public void didUpdateParent(boolean operationOK) {
                 if (operationOK) {
@@ -111,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
         KWSParent.sdk.create(this, "gabriel.coman+1013@superawesome.tv", "tetestttasa", new KWSCreateParentInterface() {
             @Override
             public void didCreateParent(KWSCreateParentStatus status) {
-                KWSLogger.log("App", "Result is " + status);
+                Log.d("App", "Result is " + status);
             }
         });
     }

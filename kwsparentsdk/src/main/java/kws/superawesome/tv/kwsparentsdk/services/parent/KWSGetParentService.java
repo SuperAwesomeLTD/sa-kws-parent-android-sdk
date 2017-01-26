@@ -1,10 +1,10 @@
 package kws.superawesome.tv.kwsparentsdk.services.parent;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.json.JSONObject;
 
-import kws.superawesome.tv.kwsparentsdk.aux.KWSLogger;
 import kws.superawesome.tv.kwsparentsdk.models.parent.KWSParentUser;
 import kws.superawesome.tv.kwsparentsdk.services.KWSHTTPMethod;
 import kws.superawesome.tv.kwsparentsdk.services.KWSService;
@@ -36,14 +36,14 @@ public class KWSGetParentService extends KWSService {
         if (status == 200 && success && payload != null) {
             KWSParentUser parent = new KWSParentUser(payload);
             if (parent.isValid()) {
-                KWSLogger.log("KWSGetParentService", "Got parent with ID: " + parent.getId() + " and Email: " + parent.getEmail());
+                Log.d("KWSGetParentService", "Got parent with ID: " + parent.getId() + " and Email: " + parent.getEmail());
                 listener.didGetParent(parent);
             } else {
-                KWSLogger.error("KWSGetParentService", "The parent data I got for user with ID : " + super.loggedUser.getMetadata().getUserId() + " was not valid.");
+                Log.e("KWSGetParentService", "The parent data I got for user with ID : " + super.loggedUser.getMetadata().getUserId() + " was not valid.");
                 listener.didGetParent(null);
             }
         } else {
-            KWSLogger.error("KWSGetParentService", "There was a network operation trying to get parent data.");
+            Log.e("KWSGetParentService", "There was a network operation trying to get parent data.");
             listener.didGetParent(null);
         }
     }
