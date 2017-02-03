@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+1.1.2
+ - Minor update to bring the SAUtils dependency to 0.3.4
+
 1.1.1
  - Updated Utils, Networking and JsonParser dependencies
  - Removed the KWSLogger class (for now)
