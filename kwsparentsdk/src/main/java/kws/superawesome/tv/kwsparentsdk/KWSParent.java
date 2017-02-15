@@ -214,6 +214,6 @@ public class KWSParent {
      * @return a string representing the SDK version
      */
     public String getVersion () {
-        return "android-1.1.2";
+        return "android-1.1.3";
     }
 }
