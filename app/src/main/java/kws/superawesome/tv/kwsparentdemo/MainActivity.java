@@ -11,11 +11,11 @@ import org.json.JSONObject;
 
 import kws.superawesome.tv.kwsparentsdk.KWSParent;
 import kws.superawesome.tv.kwsparentsdk.models.parent.KWSParentUser;
-import kws.superawesome.tv.kwsparentsdk.services.create.KWSCreateParentInterface;
-import kws.superawesome.tv.kwsparentsdk.services.create.KWSCreateParentStatus;
-import kws.superawesome.tv.kwsparentsdk.services.oauth.KWSAuthInterface;
-import kws.superawesome.tv.kwsparentsdk.services.parent.KWSGetParentInterface;
-import kws.superawesome.tv.kwsparentsdk.services.parent.KWSUpdateParentInterface;
+import kws.superawesome.tv.kwsparentsdk.services.create.KWSParentCreateUserInterface;
+import kws.superawesome.tv.kwsparentsdk.services.create.KWSParentCreateUserStatus;
+import kws.superawesome.tv.kwsparentsdk.services.oauth.KWSParentLoginUserInterface;
+import kws.superawesome.tv.kwsparentsdk.services.parent.KWSParentGetUserInterface;
+import kws.superawesome.tv.kwsparentsdk.services.parent.KWSParentUpdateUserInterface;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -50,12 +50,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void loginUser (View view) {
+
         final String email = "gabriel.coman+1013@superawesome.tv";
         final String password = "testtest";
 
-        KWSParent.sdk.login(this, email, password, new KWSAuthInterface() {
+        KWSParent.sdk.loginUser(this, email, password, new KWSParentLoginUserInterface() {
             @Override
-            public void didAuthUser(boolean operationOK) {
+            public void didLoginUser(boolean operationOK) {
                 if (operationOK) {
                     logs += "Managed to authenticate user " + email + "\n";
                 } else {
@@ -67,16 +68,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void logoutUser (View view) {
-        KWSParent.sdk.logout(this);
+        KWSParent.sdk.logoutUser(this);
         logs += "Logged out of this user\n";
         textView.setText(logs);
         authButton.setText("Login as KWS Parent");
     }
 
     public void getParentData (View view) {
-        KWSParent.sdk.getParentData(this, new KWSGetParentInterface() {
+        KWSParent.sdk.getUser(this, new KWSParentGetUserInterface() {
             @Override
-            public void didGetParent(KWSParentUser parent) {
+            public void didGetUser(KWSParentUser parent) {
                 if (parent != null) {
                     logs += "Parent data is " + parent.writeToJson().toString() + "\n";
                 } else {
@@ -92,13 +93,13 @@ public class MainActivity extends AppCompatActivity {
         updated.setFirstName("Juan");
         updated.setLastName("Marcos");
 
-        KWSParent.sdk.update(this, updated, new KWSUpdateParentInterface() {
+        KWSParent.sdk.updateUser(this, updated, new KWSParentUpdateUserInterface() {
             @Override
-            public void didUpdateParent(boolean operationOK) {
+            public void didUpdateUser(boolean operationOK) {
                 if (operationOK) {
                     logs += "Updated user successfully!\n";
                 } else {
-                    logs += "Failed to update user data\n";
+                    logs += "Failed to updateUser user data\n";
                 }
                 textView.setText(logs);
             }
@@ -106,9 +107,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getChildren (View view) {
-        KWSParent.sdk.create(this, "gabriel.coman+1013@superawesome.tv", "tetestttasa", new KWSCreateParentInterface() {
+        KWSParent.sdk.createUser(this, "gabriel.coman+1013@superawesome.tv", "tetestttasa", new KWSParentCreateUserInterface() {
             @Override
-            public void didCreateParent(KWSCreateParentStatus status) {
+            public void didCreateUser(KWSParentCreateUserStatus status) {
                 Log.d("App", "Result is " + status);
             }
         });

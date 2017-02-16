@@ -2,6 +2,6 @@ package kws.superawesome.tv.kwsparentsdk.services.parent;
 
 import kws.superawesome.tv.kwsparentsdk.models.parent.KWSParentUser;
 
-public interface KWSGetParentInterface {
-    void didGetParent(KWSParentUser parent);
+public interface KWSParentGetUserInterface {
+    void didGetUser (KWSParentUser parent);
 }

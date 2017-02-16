@@ -87,10 +87,10 @@ public class KWSAuthService extends KWSService {
         this.password = password;
         this.listener = listener != null ? listener : new KWSInternalAuthInterface() {@Override public void didAuthUser(KWSLoggedUser user) {}};
 
-        // create endpoint
+        // createUser endpoint
         final String endpoint = KWSService.kwsApiURL + getEndpoint();
 
-        // create a new async task
+        // createUser a new async task
         new SAAsyncTask<>(context, new SAAsyncTaskInterface<SANetworkResult>() {
             @Override
             public SANetworkResult taskToExecute() throws Exception {
@@ -99,7 +99,7 @@ public class KWSAuthService extends KWSService {
                 InputStreamReader in;
                 OutputStream os = null;
 
-                // create a connection
+                // createUser a connection
                 URL url = new URL(endpoint);
                 HttpsURLConnection conn = (HttpsURLConnection)url.openConnection();
                 conn.setReadTimeout(15000);

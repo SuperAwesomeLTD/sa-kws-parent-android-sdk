@@ -11,7 +11,7 @@ import tv.superawesome.lib.sajsonparser.SAJsonParser;
 
 public class KWSCreateParentService extends KWSService {
 
-    private KWSCreateParentInterface listener;
+    private KWSParentCreateUserInterface listener;
     private String email;
     private String password;
 
@@ -51,24 +51,24 @@ public class KWSCreateParentService extends KWSService {
         KWSCreatedParent createdParent = new KWSCreatedParent(payload);
 
         if (createdParent.isValid()) {
-            listener.didCreateParent(KWSCreateParentStatus.CREATED);
+            listener.didCreateUser(KWSParentCreateUserStatus.Success);
         } else {
             if (createdParent.isPasswordInvalid()) {
-                listener.didCreateParent(KWSCreateParentStatus.INVALID_PASSWORD);
+                listener.didCreateUser(KWSParentCreateUserStatus.InvalidPassword);
             } else if (createdParent.isEmailInvalid()) {
-                listener.didCreateParent(KWSCreateParentStatus.INVALID_EMAIL);
+                listener.didCreateUser(KWSParentCreateUserStatus.InvalidEmail);
             } else if (createdParent.isEmailDuplicate()) {
-                listener.didCreateParent(KWSCreateParentStatus.DUPLICATE);
+                listener.didCreateUser(KWSParentCreateUserStatus.DuplicateUsername);
             } else {
-                listener.didCreateParent(KWSCreateParentStatus.NETWORK_ERROR);
+                listener.didCreateUser(KWSParentCreateUserStatus.NetworkError);
             }
         }
     }
 
-    public void execute (Context context, String email, String password, KWSCreateParentInterface listener) {
+    public void execute (Context context, String email, String password, KWSParentCreateUserInterface listener) {
         this.email = email;
         this.password = password;
-        this.listener = listener != null ? listener : new KWSCreateParentInterface() {@Override public void didCreateParent(KWSCreateParentStatus status) {}};
+        this.listener = listener != null ? listener : new KWSParentCreateUserInterface() {@Override public void didCreateUser(KWSParentCreateUserStatus status) {}};
         super.execute(context);
     }
 }

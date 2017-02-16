@@ -36,7 +36,7 @@ import tv.superawesome.lib.sajsonparser.SAJsonParser;
 
 public class KWSUpdateParentService extends KWSService {
 
-    private KWSUpdateParentInterface listener;
+    private KWSParentUpdateUserInterface listener;
     private KWSParentUser updatedParentUser;
 
     @Override
@@ -66,21 +66,21 @@ public class KWSUpdateParentService extends KWSService {
     public void success(int status, String payload, boolean success) {
         boolean updatedStatus = success && status == 204;
         if (updatedStatus) {
-            Log.d("KWSUpdateParentService", "Manged to update user!");
+            Log.d("KWSUpdateParentService", "Manged to updateUser user!");
         } else {
-            Log.e("KWSUpdateParentService", "Wasn't able to update user! " + payload);
+            Log.e("KWSUpdateParentService", "Wasn't able to updateUser user! " + payload);
         }
-        listener.didUpdateParent(updatedStatus);
+        listener.didUpdateUser(updatedStatus);
     }
 
-    public void execute (Context context, final KWSParentUser updatedParentUser, KWSUpdateParentInterface listener) {
-        this.listener = listener != null ? listener : new KWSUpdateParentInterface() {@Override public void didUpdateParent(boolean operationOK) {}};
+    public void execute (Context context, final KWSParentUser updatedParentUser, KWSParentUpdateUserInterface listener) {
+        this.listener = listener != null ? listener : new KWSParentUpdateUserInterface() {@Override public void didUpdateUser(boolean operationOK) {}};
         this.updatedParentUser = updatedParentUser;
         this.loggedUser = KWSParent.sdk.getLoggedUser();
 
         final KWSUpdateParentService instance = this;
 
-        // no logged user, no update
+        // no logged user, no updateUser
         if (needsLoggedUser() && loggedUser == null) {
             instance.success(0, null, false);
             return;

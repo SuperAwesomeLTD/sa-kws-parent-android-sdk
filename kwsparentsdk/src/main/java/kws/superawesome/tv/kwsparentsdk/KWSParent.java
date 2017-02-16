@@ -6,14 +6,14 @@ import android.util.Log;
 
 import kws.superawesome.tv.kwsparentsdk.models.oauth.KWSLoggedUser;
 import kws.superawesome.tv.kwsparentsdk.models.parent.KWSParentUser;
-import kws.superawesome.tv.kwsparentsdk.services.create.KWSCreateParentInterface;
+import kws.superawesome.tv.kwsparentsdk.services.create.KWSParentCreateUserInterface;
 import kws.superawesome.tv.kwsparentsdk.services.create.KWSCreateParentService;
-import kws.superawesome.tv.kwsparentsdk.services.oauth.KWSAuthInterface;
+import kws.superawesome.tv.kwsparentsdk.services.oauth.KWSParentLoginUserInterface;
 import kws.superawesome.tv.kwsparentsdk.services.oauth.KWSInternalAuthInterface;
 import kws.superawesome.tv.kwsparentsdk.services.oauth.KWSAuthService;
-import kws.superawesome.tv.kwsparentsdk.services.parent.KWSGetParentInterface;
+import kws.superawesome.tv.kwsparentsdk.services.parent.KWSParentGetUserInterface;
 import kws.superawesome.tv.kwsparentsdk.services.parent.KWSGetParentService;
-import kws.superawesome.tv.kwsparentsdk.services.parent.KWSUpdateParentInterface;
+import kws.superawesome.tv.kwsparentsdk.services.parent.KWSParentUpdateUserInterface;
 import kws.superawesome.tv.kwsparentsdk.services.parent.KWSUpdateParentService;
 
 public class KWSParent {
@@ -36,7 +36,7 @@ public class KWSParent {
 
     /**
      * Current in-memory logged user. This will either get set (or null-ed) as part of a
-     * login / logout operation, or if the SDK user calls "setup" at the start of the app
+     * loginUser / logoutUser operation, or if the SDK user calls "setup" at the start of the app
      * lifecycle and that in turn finds out there is a user in shared preferences.
      */
     private KWSLoggedUser loggedUser;
@@ -85,27 +85,31 @@ public class KWSParent {
         }
     }
 
+    public void reset () {
+        loggedUser = null;
+    }
+
     /**
      * Method that creates a new parent user
      * @param context - the current context
      * @param parentEmail - an email address for the new parent user.
      *              If it's invalid, the method will forward a listener call with
-     *              INVALID_EMAIL as status parameter.
+     *              InvalidEmail as status parameter.
      *              If it's a duplicate email, the method will forward a listener call with
-     *              DUPLICATE as status parameter.
+     *              DuplicateUsername as status parameter.
      * @param password - a valid password for the new parent user. If it's invalid (e.g. less
      *                 than 8 characters), the method will forward a listener call with
-     *                 INVALID_PASSWORD as status parameter
+     *                 InvalidPassword as status parameter
      * @param listener - the listener used as callback for the method. Will always need one
-     *                 method implementation "didCreateParent" with a status parameter that can
+     *                 method implementation "didCreateUser" with a status parameter that can
      *                 have one of the following enum values:
-     *                      - CREATED
-     *                      - DUPLICATE
-     *                      - INVALID_EMAIL
-     *                      - INVALID_PASSWORD
-     *                      - NETWORK_ERROR
+     *                      - Success
+     *                      - DuplicateUsername
+     *                      - InvalidEmail
+     *                      - InvalidPassword
+     *                      - NetworkError
      */
-    public void create (Context context, String parentEmail, String password, KWSCreateParentInterface listener) {
+    public void createUser (Context context, String parentEmail, String password, KWSParentCreateUserInterface listener) {
         createParentService.execute(context, parentEmail, password, listener);
     }
 
@@ -116,10 +120,10 @@ public class KWSParent {
      * @param parentEmail - a valid parent's user email
      * @param password - a valid parent's user password
      * @param listener - the listener used as callback for the method. Will always need one
-     *                 method implementation for "didAuthUser" with a boolean parameter indicating
+     *                 method implementation for "didLoginUser" with a boolean parameter indicating
      *                 success or failure.
      */
-    public void login (final Context context, String parentEmail, String password, final KWSAuthInterface listener) {
+    public void loginUser (final Context context, String parentEmail, String password, final KWSParentLoginUserInterface listener) {
         authService.execute(context, parentEmail, password, new KWSInternalAuthInterface() {
             @Override
             public void didAuthUser(KWSLoggedUser user) {
@@ -135,12 +139,12 @@ public class KWSParent {
 
                     // call proper valid callback
                     if (listener != null) {
-                        listener.didAuthUser(true);
+                        listener.didLoginUser(true);
                     }
                 } else {
                     // don't save user & call empty callback
                     if (listener != null) {
-                        listener.didAuthUser(false);
+                        listener.didLoginUser(false);
                     }
                 }
 
@@ -154,7 +158,7 @@ public class KWSParent {
      * in memory user.
      * @param context - the current context
      */
-    public void logout (Context context) {
+    public void logoutUser (Context context) {
 
         preferences = context.getSharedPreferences(KWS_PARENT_SDK_PREF, 0);
         preferences.edit().remove(KWS_PARENT_SDK_USER_KEY).apply();
@@ -169,11 +173,11 @@ public class KWSParent {
      * logged user.
      * @param context - the current context
      * @param listener - the listener used as callback for the method. Will always need one
-     *                 method implementation for "didGetParent", which will in turn have one
+     *                 method implementation for "didGetUser", which will in turn have one
      *                 parameter of type KWSParentUser, which is a model class that contains all
      *                 parent details.
      */
-    public void getParentData (Context context, KWSGetParentInterface listener) {
+    public void getUser (Context context, KWSParentGetUserInterface listener) {
         getParentService.execute(context, listener);
     }
 
@@ -186,10 +190,10 @@ public class KWSParent {
      * @param parent - a KWSParentUser type model that contains the fields to be updated. All
      *                fields that are set to null are ignored.
      * @param listener - the listener used as callback for the method. Will always need one
-     *                 method implementation for "didUpdateParent", which will in turn have one
+     *                 method implementation for "didUpdateUser", which will in turn have one
      *                 parameter of type boolean indicating if the operation was successful or not.
      */
-    public void update(Context context, KWSParentUser parent, KWSUpdateParentInterface listener) {
+    public void updateUser (Context context, KWSParentUser parent, KWSParentUpdateUserInterface listener) {
         updateParentService.execute(context, parent, listener);
     }
 
@@ -214,6 +218,6 @@ public class KWSParent {
      * @return a string representing the SDK version
      */
     public String getVersion () {
-        return "android-1.1.3";
+        return "android-1.2.0";
     }
 }

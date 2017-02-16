@@ -12,7 +12,7 @@ import tv.superawesome.lib.sajsonparser.SAJsonParser;
 
 public class KWSGetParentService extends KWSService {
 
-    private KWSGetParentInterface listener;
+    private KWSParentGetUserInterface listener;
 
     @Override
     public String getEndpoint() {
@@ -37,19 +37,19 @@ public class KWSGetParentService extends KWSService {
             KWSParentUser parent = new KWSParentUser(payload);
             if (parent.isValid()) {
                 Log.d("KWSGetParentService", "Got parent with ID: " + parent.getId() + " and Email: " + parent.getEmail());
-                listener.didGetParent(parent);
+                listener.didGetUser(parent);
             } else {
                 Log.e("KWSGetParentService", "The parent data I got for user with ID : " + super.loggedUser.getMetadata().getUserId() + " was not valid.");
-                listener.didGetParent(null);
+                listener.didGetUser(null);
             }
         } else {
             Log.e("KWSGetParentService", "There was a network operation trying to get parent data.");
-            listener.didGetParent(null);
+            listener.didGetUser(null);
         }
     }
 
-    public void execute (Context context, KWSGetParentInterface listener) {
-        this.listener = listener != null ? listener : new KWSGetParentInterface() {@Override public void didGetParent(KWSParentUser parent) {}};
+    public void execute (Context context, KWSParentGetUserInterface listener) {
+        this.listener = listener != null ? listener : new KWSParentGetUserInterface() {@Override public void didGetUser(KWSParentUser parent) {}};
         super.execute(context);
     }
 }
